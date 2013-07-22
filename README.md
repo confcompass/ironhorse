@@ -41,6 +41,13 @@ app.start(3000, function(err) {
 
 The order in which middlewares are passed to the express instance matters, which can be a bit of a headache if you want some plugins to define routes and middleware. That's why Ironhorse borrows the idea of 'before' and 'after' middlewares from Union, combined with the fact that middlewares are not setup in the express instance until the init phase of the flatiron app, giving the chance to other plugins to reorder some middlewares in the attach phase.
 
+## Additional plugins
+
+Besides the base Express plugin, ironhorse ships with additional plugins:
+
+  * passport: passport authentication middleware
+  * i18next: i18next translation library
+
 ## License
 
 (The MIT License)

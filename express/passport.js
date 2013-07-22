@@ -1,4 +1,5 @@
 
+var logger = require('winston');
 
 /**
  *
@@ -13,14 +14,17 @@ var Plugin = module.exports = {};
  * @param {Object} config.passport Passport module to use for the authentication
  */
 Plugin.attach = function (config) {
-    var app = this;
     
-    var passport = config.passport;
+    if (!this.express) {
+        throw new Error("The ironhorse/express plugin must be attached before attaching ironhorse/passport");
+    }
+
+    logger.info("Attaching the ironhorse/passport plugin...")
+    
+    var passport = this.passport = config.passport;
     
     // use passport session
-    app.express.before(passport.initialize());
-    app.express.before(passport.session());
-
-    app.passport = passport;
+    this.express.before(passport.initialize());
+    this.express.before(passport.session());
 
 }
