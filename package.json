@@ -1,0 +1,15 @@
+{
+  "name": "ironhorse",
+  "description": "Flatiron plugin for Express that borrows some of the good ideas of Union without the route and middleware nonsense.",
+  "version": "0.0.1",
+  "dependencies" : {
+    "winston": "*"
+  },
+  "devDependencies": {
+    "flatiron": "*",
+    "express": "*",
+    "jade": "*",
+    "passport": "*",
+    "passport-http": "*"
+  }
+}
