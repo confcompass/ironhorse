@@ -12,11 +12,9 @@ The `minimal.js` file in the example directory gives you the bare minimum lines 
 
 ```
 var app = require('flatiron').app
-  , express = require('express')
   , logger = require('winston')
 
 app.use(require('ironhorse/express'), {
-    server: express()
 });
 
 // Do this inside route plugins
@@ -32,7 +30,7 @@ app.start(3000, function(err) {
 
 ## Features
 
-  * Version-agnostic: you pass the constructed Express instance.
+  * Version-agnostic: you pass the constructed Express instance, or let ironhorse try to build one
   * Seamless integration of Express into a Flatiron app.
   * Delayed middleware and route setup.
   * Asynchronous initialization.
@@ -45,8 +43,9 @@ The order in which middlewares are passed to the express instance matters, which
 
 Besides the base Express plugin, ironhorse ships with additional plugins:
 
-  * passport: passport authentication middleware
-  * i18next: i18next translation library
+  * config: nconf-based config loading to `app.config`
+  * passport: passport authentication middleware in `app.passport`
+  * i18next: i18next translation library in `app.i18next`
 
 ## License
 

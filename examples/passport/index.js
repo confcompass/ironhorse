@@ -8,7 +8,6 @@
 
 var app = require('flatiron').app
   , express = require('express')
-  , passport = require('passport')
   , BasicStrategy = require('passport-http').BasicStrategy
   , logger = require('winston')
 
@@ -17,7 +16,6 @@ var app = require('flatiron').app
  * passing an express app, and cookie and session middlewares 
  */ 
 app.use(require('../../express'), {
-    server: express(),
     views: __dirname,
     view_engine: 'jade',
     before: [
@@ -30,7 +28,6 @@ app.use(require('../../express'), {
  * Configure passport using HTTP Auth
  */
 app.use(require('../../express/passport'), {
-    passport: new passport.Passport()
 });
 
 app.passport.use(new BasicStrategy(

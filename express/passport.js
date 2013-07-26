@@ -1,6 +1,15 @@
 
 var logger = require('winston');
 
+function passport() {
+    try {
+        var p = require('passport');
+    } catch (ex) {
+        throw new Error('No passport instance was provided. We tried to start our own, but we could not load the \'passport\' module.');
+    }
+    return new p.Passport();
+}
+
 /**
  *
  * The passport module initializes Passport authentication, to
@@ -21,10 +30,10 @@ Plugin.attach = function (config) {
 
     logger.info("Attaching the ironhorse/passport plugin...")
     
-    var passport = this.passport = config.passport;
+    this.passport = config.passport || passport();
     
     // use passport session
-    this.express.before(passport.initialize());
-    this.express.before(passport.session());
+    this.express.before(this.passport.initialize());
+    this.express.before(this.passport.session());
 
 }

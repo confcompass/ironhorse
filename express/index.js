@@ -2,8 +2,17 @@
 
 var logger = require('winston')
 
+function express() {
+    try {
+        var xp = require('express');
+    } catch (ex) {
+        throw new Error('No server instance was provided. We tried to start our own, but we could not load the express module.');
+    }
+    return xp();
+}
+
 var Express = function(options) {
-    this.server = options.server;
+    this.server = options.server || express();
     this._before = [];
     this._after = [];
     this._routes = [];

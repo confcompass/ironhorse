@@ -13,11 +13,22 @@ var app = require('flatiron').app
 app.use(require('../express'), {
 });
 
+/** 
+ * Attach the config plugin loading some defaults
+ * and adding argv overrides
+ */
+app.use(require('../config'), {
+    defaults: {
+        name: 'Kitty'
+    },
+    argv: true
+});
+
 /*
  * Tranditional Express-like router configuration
  */
 app.express.get('/', function(req, res) {
-    res.send(200, 'Hello World!');
+    res.send(200, 'Hello ' + app.config.get('name'));
 });
 
 /*

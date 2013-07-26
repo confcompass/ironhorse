@@ -13,11 +13,20 @@ var app = require('flatiron').app
 app.use(require('../express'), {
 });
 
+/** 
+ * Attach the config plugin loading a yaml file
+ * and adding argv overrides
+ */
+app.use(require('../config'), {
+    yaml: __dirname + '/config.yaml',
+    argv: true
+});
+
 /*
  * Tranditional Express-like router configuration
  */
 app.express.get('/', function(req, res) {
-    res.send(200, 'Hello World!');
+    res.send(200, 'Hello ' + app.config.get('name'));
 });
 
 /*
