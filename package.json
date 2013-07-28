@@ -1,7 +1,7 @@
 {
   "name": "ironhorse",
   "description": "Flatiron plugin for Express that borrows some of the good ideas of Union without the route and middleware nonsense.",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "repository" : {
     "type" : "git",
     "url" : "https://github.com/confcompass/ironhorse.git"
@@ -10,7 +10,8 @@
   "license" : "MIT",
   "dependencies" : {
     "winston": "*",
-    "nconf" : "*"
+    "nconf" : "*",
+    "fs-walk": "*"
   },
   "keywords": ["flatiron", "express"],
   "devDependencies": {

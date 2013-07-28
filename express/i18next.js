@@ -2,6 +2,16 @@
 
 var logger = require('winston');
 
+
+function i18next() {
+    try {
+        var i18n = require('i18next');
+    } catch (ex) {
+        throw new Error('No i18next instance was provided. We tried to start our own, but we could not load the \'i18next\' module.');
+    }
+    return i18n;
+}
+
 /**
  *
  * The i18next module initializes i18next translations and registers the
@@ -25,12 +35,11 @@ Plugin.attach = function (config) {
     
     logger.info("Attaching the ironhorse/i18next plugin...")
 
-    var i18n = config.i18next;
-    this.i18n = i18n;
+    this.i18n = i18next();
 
-    i18n.init(config.init || {});
+    this.i18n.init(config || {});
 
-	this.express.before(i18n.handle);
-	i18n.registerAppHelper(this.express.server);
+	this.express.before(this.i18n.handle);
+	this.i18n.registerAppHelper(this.express.server);
 
 };
