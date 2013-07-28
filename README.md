@@ -1,6 +1,8 @@
 # ironhorse
 
-Flatiron plugin for Express that borrows some of the good ideas of Union without the route and middleware nonsense.
+Collection of Flatiron plugins that simplify developing NodeJS web applications.
+Ironhorse uses Express under the hood, borrowing some of the good ideas of
+Union without the route and middleware nonsense.
 
 ## Installation
 
@@ -46,6 +48,7 @@ Besides the base Express plugin, ironhorse ships with additional plugins:
   * config: nconf-based config loading to `app.config`
   * passport: passport authentication middleware in `app.passport`
   * i18next: i18next translation library in `app.i18next`
+  * kue: kue plugin that starts a job queue in `app.jobs`
 
 ## License
 
