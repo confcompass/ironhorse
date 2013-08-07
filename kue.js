@@ -1,5 +1,6 @@
 
 var kue = require('kue')
+  , logger = require('winston')
   , redis = require('redis');
 
 /*
@@ -19,6 +20,12 @@ Plugin.attach = function(config) {
 
     kue.redis.createClient = function() {
         var client = redis.createClient(config.port, config.host);
+        client.on('error', function(error) {
+            logger.error("Error in connection to KUE Redis");
+        });
+        client.on('connect', function() {
+            logger.info("Connection to KUE Redis server open");
+        })
         if (config.auth) {
             client.auth(config.auth);
         }
