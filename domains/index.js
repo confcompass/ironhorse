@@ -1,6 +1,5 @@
 
 var logger = require('winston')
-    , _ = require('underscore')
     , async = require('async')
     , Domain = require('./domain')
     , path = require('path')
@@ -33,13 +32,6 @@ exports.init = function(done) {
     async.each(Object.keys(app.db), function(domain, next) {
         var db = app.db[domain];
         db.connect();
-        db.on('open', function() {
-            logger.info("DB connection to %s for domain '%s' open", db.url, domain);
-            next();
-        });
-        db.on('error', function(err) {
-            logger.err("Failed to open DB connection to %s for domain '%s'", db.url, domain, err);
-            next(err);
-        });
+        next();
     }, done);
 }

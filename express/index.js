@@ -120,9 +120,9 @@ Plugin.attach = function(options) {
                     return callback(err);
                 }
                 throw err;
+            } else {
+                app.express.listen(port, host, callback);
             }
-
-            app.express.listen(port, host, callback);
         });
     }
 };

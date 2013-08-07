@@ -6,9 +6,8 @@ var logger = require("winston")
     , Mongoose = require('mongoose').Mongoose
     , Filestore = require('./filestore')
 
-var Domain = module.exports = function(url, options) {
+var Domain = module.exports = function(url) {
     this.url = url;
-    this.options = options || {};
     this.mongoose = new Mongoose();
     this.filestore = new Filestore(this.mongoose);
     this.middleware = new Middleware(this);
@@ -16,9 +15,14 @@ var Domain = module.exports = function(url, options) {
 
 util.inherits(Domain, EventEmitter);
 
-Domain.prototype.connect = function(url, options) {
+Domain.prototype.connect = function() {
     var self = this;
-    this.mongoose.connect(this.url, this.options);
+
+    var connect = function() {
+        self.mongoose.connect(self.url, {server: { auto_reconnect: false }});
+    }
+
+    connect();
 
     var db = this.mongoose.connection;
 
@@ -26,9 +30,8 @@ Domain.prototype.connect = function(url, options) {
         logger.info('Connecting to MongoDB...');
     });
 
-    db.on('error', function(error) {
-        logger.error('Error in MongoDb connection', error);
-        self.emit(error);
+    db.on('error', function() {
+        logger.error('Error in MongoDb connection');
     });
 
     db.on('connected', function() {
@@ -37,7 +40,6 @@ Domain.prototype.connect = function(url, options) {
 
     db.on('open', function() {
         logger.info('MongoDB connection opened!');
-        self.emit('open');
     });
 
     db.on('reconnected', function () {
@@ -45,7 +47,8 @@ Domain.prototype.connect = function(url, options) {
     });
 
     db.on('disconnected', function() {
-        logger.warn('MongoDB disconnected!');
+        logger.warn('MongoDB disconnected, will reconnect in 5 seconds!');
+        setTimeout(connect, 5000);
     });
 }
 
