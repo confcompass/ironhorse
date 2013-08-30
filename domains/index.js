@@ -12,17 +12,22 @@ exports.attach = function(config) {
     for (var domain in config) {
         logger.info("Attaching DB domain '%s'", domain);
         var db = this.db[domain] = new Domain(config[domain].url, config[domain].options);
-
-        walk.filesSync(config[domain].models, function(basedir, file) {
-            if (file.match(/.*\.js/)) {
-                var module = path.resolve(
-                    process.cwd(), 
-                    path.join(basedir, file.replace('.js', '')));
-                logger.info("Attaching DB model '%s' to domain '%s'", file, domain);
-                require(module)(db.mongoose);
-            }
-        });
-
+        var models = config[domain].models;
+        if ('string' === typeof(models)) {
+        	models = [models];
+        }
+        models.forEach(function(models_path) {
+	        walk.filesSync(models_path, function(basedir, file) {
+	            if (file.match(/.*\.js/)) {
+                    var modulebase = path.join(basedir, file.replace('.js', ''));
+	                var module = path.resolve(
+                        process.cwd(), 
+                        modulebase);
+	                logger.info("Attaching DB model '%s' to domain '%s'", modulebase, domain);
+	                require(module)(db.mongoose);
+	            }
+	        });
+	    });
     }
 
 };

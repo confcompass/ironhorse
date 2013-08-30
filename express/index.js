@@ -68,7 +68,7 @@ Express.prototype.init = function(done) {
         }, this);
         logger.info("Registering %d routes", this._routes.length);
         this._routes.forEach(function(route) {
-            logger.info("    %s %s", route.verb.toUpperCase(), route.args[0]);
+            logger.info("    %s %s", route.verb.toUpperCase(), route.args[0].toString());
             this.server[route.verb].apply(this.server, route.args);
         }, this);
         logger.info("Registering %d 'after' middlewares", this._after.length);

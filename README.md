@@ -29,7 +29,6 @@ app.start(3000, function(err) {
 });
 ```
 
-
 ## Features
 
   * Version-agnostic: you pass the constructed Express instance, or let ironhorse try to build one
@@ -46,9 +45,15 @@ The order in which middlewares are passed to the express instance matters, which
 Besides the base Express plugin, ironhorse ships with additional plugins:
 
   * config: nconf-based config loading to `app.config`
+  * domains: mongoose database 'domains' with separate models and DB connections
   * passport: passport authentication middleware in `app.passport`
   * i18next: i18next translation library in `app.i18next`
   * kue: kue plugin that starts a job queue in `app.jobs`
+
+## Changelog
+
+  * 0.0.7 [30-08-2013]
+    * The models option of each domain accepts either a string path, or a list of paths. 
 
 ## License
 
