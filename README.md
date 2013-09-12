@@ -52,6 +52,8 @@ Besides the base Express plugin, ironhorse ships with additional plugins:
 
 ## Changelog
 
+  * 0.0.8 [12-09-2013]
+    * Added upload middleware to the filestore in the domains. 
   * 0.0.7 [30-08-2013]
     * The models option of each domain accepts either a string path, or a list of paths. 
 

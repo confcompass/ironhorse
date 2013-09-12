@@ -1,5 +1,6 @@
 
-var gridfs = require('gridfs-stream')
+var _ = require('underscore')
+  , gridfs = require('gridfs-stream')
   , temp = require('temp')
   , logger = require('winston')
   , EventEmitter = require('events').EventEmitter
@@ -70,14 +71,10 @@ Filestore.prototype.findOne = function(options, root, done) {
  * Allowed options are `_id`, `filename`, `contentType`, `mode`... (see the documentation of GridFS for more details)
  * If no _id is provided, a new file will be stored (even if the filename is repeated) and a new _id will be returned.
  * Otherwise the file will be replaced (`mode: 'w'`) or appended (`mode: 'w+'`)
- * @param {Function(err, file)} done Asynchronous return callback.
  */
-Filestore.prototype.put = function(stream, options, done) {
+Filestore.prototype.put = function(stream, options) {
     var ws = this._grid.createWriteStream(options);
     stream.pipe(ws);
-    ws.on('close', function(file) {
-        done(null, file);
-    });
     return ws;
 };
 
@@ -186,6 +183,7 @@ Middleware.prototype.findOne = function(param, options, root, nfe) {
 
 /**
  * Middleware that finds one particular file instance, and sends it in the response as an attachment.
+ * The options param object will be merged to the req.params.
  *
  * @param {Object} options Storage options (metadata) the found file must satisfy.
  * Allowed options are `_id`, `filename`, `contentType`...
@@ -195,19 +193,47 @@ Middleware.prototype.findOne = function(param, options, root, nfe) {
 Middleware.prototype.download = function(options, root) {
     var self = this;
     return function(req, res, next) {
-        self.fs.findOne(options, root, function(err, file) {
+        var q = _.extend({}, req.params, options)
+        self.fs.findOne(q, root, function(err, file) {
             if (err) return next(err);
             if (!file) {
                 return res.send(404, "Not Found");
             }
-            res.set('Content-Disposition', 'attachment; filename=' + file.filename);
+            if (file.filename) {
+                res.set('Content-Disposition', 'attachment; filename=' + file.filename);
+            }
             res.set('Content-Type', file.contentType);
             res.set('Content-Length', file.length);
-            res.set('ETag', file.md5);
-            var rs = self.fs.get(res, {_id: file._id});
-            rs.on('error', next);
+            res.set('Content-MD5', file.md5);
+            self.fs.get(res, {
+                _id: file._id
+            }).on('error', next);
         });
     };
-}
+};
+
+/**
+ * Middleware that uploads a streamed file.
+ * The options param object will be merged to the req.params. The
+ * Content-Type header will be used for the content type in the store. 
+ *
+ * @param {Object} options Storage options (metadata) the found file must satisfy.
+ * Allowed options are `_id`, `filename`, `contentType`...
+ * @returns {Function(req, res, next)} Middleware closure.
+ */
+Middleware.prototype.upload = function(options) {
+    var self = this;
+    return function(req, res, next) {
+        var q = _.extend({
+            mode: 'w',
+            contentType: req.get('Content-Type') || 'application/octet-stream'
+        }, req.params, options)
+        self.fs.put(req, q).on('close', function() {
+            next();
+        }).on('error', function(error) { next(error); });
+    };
+};
+
+
 
 module.exports = Filestore;
