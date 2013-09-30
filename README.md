@@ -52,6 +52,9 @@ Besides the base Express plugin, ironhorse ships with additional plugins:
 
 ## Changelog
 
+  * 0.0.9 [01-10-2013]
+    * Added ready middleware to db domains to return 503 if connection breaks.
+    * Removed libyaml in favor of js-yaml. 
   * 0.0.8 [12-09-2013]
     * Added upload middleware to the filestore in the domains. 
   * 0.0.7 [30-08-2013]

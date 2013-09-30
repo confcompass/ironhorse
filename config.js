@@ -8,15 +8,7 @@ var nconf = require('nconf')
   , path = require('path')
   , logger = require('winston')
   , util = require('util')
-
-
-function yaml() {
-    try {
-        return require('libyaml');
-    } catch (ex) {
-        throw new Error('To use config.yaml you must have \'libyaml\' as dependency');
-    }
-}
+  , YAML = require('js-yaml')
 
 /*
  * private nconf parser interface implementation that provides
@@ -27,16 +19,10 @@ function yaml() {
  */
 var YamlConfigParser = {
     parse: function(str) {
-        var YAML = yaml();
-        var documents = YAML.parse(str);
-        if (documents.length > 1) {
-            logger.warn('Parsed YAML configuration contained more than one document, only the first will be loaded');
-        }
-        return documents[0];
+        return YAML.safeLoad(str);
     },
     stringify: function(o) { 
-        var YAML = yaml();
-        return YAML.stringify(o);
+        return YAML.safeDump(o);
     }
 };
 
