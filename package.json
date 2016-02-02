@@ -1,7 +1,7 @@
 {
   "name": "ironhorse",
   "description": "Flatiron plugin for Express that borrows some of the good ideas of Union without the route and middleware nonsense.",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "repository" : {
     "type" : "git",
     "url" : "https://github.com/confcompass/ironhorse.git"
@@ -19,7 +19,7 @@
     "passport": "*",
     "passport-http": "*",
     "js-yaml": "*",
-    "mongoose": "3.8.x",
+    "mongoose": "*",
     "gridfs-stream": "*",
     "temp": "*",
     "kue": "*",
