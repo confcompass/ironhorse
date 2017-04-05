@@ -34,6 +34,10 @@ var Express = function(options) {
     }
 };
 
+Express.prototype.use = function() {
+    this.server.use.apply(this.server, arguments);
+};
+
 Express.prototype.set = function() {
     this.server.set.apply(this.server, arguments);
 };
