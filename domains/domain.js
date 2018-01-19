@@ -20,7 +20,10 @@ Domain.prototype.connect = function() {
     var self = this;
 
     var connect = function() {
-        self.mongoose.connect(self.url, {server: { auto_reconnect: false }});
+        self.mongoose.connect(self.url, {
+            useMongoClient: true,
+            reconnectTries: 100
+        });
     }
 
     connect();
