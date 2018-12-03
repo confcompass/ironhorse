@@ -50,7 +50,7 @@ Express.prototype.get = function(name) {
     }
 };
 
-["post", "put", "del"].forEach(function (method) {
+["post", "put", "del", "param"].forEach(function (method) {
     Express.prototype[method] = function() {
         this._routes.push({verb: method, args: arguments});
     };
@@ -101,17 +101,17 @@ var Plugin = module.exports = {
 Plugin.attach = function(options) {
 
     var app = this;
-    
+
     app.express = new Express(options);
-    
+
     if (options.view_engine) {
         app.express.set('view engine', options.view_engine);
     }
-    
+
     if (options.views) {
         app.express.set('views', options.views);
     }
-    
+
     app.start = function(port, host, callback) {
         if (!callback && typeof host === 'function') {
             callback = host;
