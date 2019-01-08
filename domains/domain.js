@@ -10,6 +10,7 @@ var logger = require("winston")
 var Domain = module.exports = function(url) {
     this.url = url;
     this.mongoose = new Mongoose();
+    this.mongoose.Promise = global.Promise;
     this.filestore = new Filestore(this.mongoose);
     this.middleware = new Middleware(this);
 }
@@ -96,7 +97,7 @@ Middleware.prototype.ready = function(options) {
                 html: function() {
                     if (view) {
                         res.status(status);
-                        res.render(view, { 
+                        res.render(view, {
                             path: req.path
                         });
                     } else {

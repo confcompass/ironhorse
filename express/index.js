@@ -50,7 +50,7 @@ Express.prototype.get = function(name) {
     }
 };
 
-["post", "put", "del", "param"].forEach(function (method) {
+["post", "put", "del", "delete", "param"].forEach(function (method) {
     Express.prototype[method] = function() {
         this._routes.push({verb: method, args: arguments});
     };
